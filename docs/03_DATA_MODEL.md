@@ -171,6 +171,7 @@ Represents a particular questionnaire file imported.
 - `EvidenceAdded`, `EvidenceRemoved`
 - `DocumentCreated`, `DocumentVersionAdded`
 - `ControlCreated`, `ControlUpdated`, `ControlMappedEvidence`
+- `AnswerBankEntryCreated`, `AnswerBankEntryUpdated`, `AnswerBankEntryDeleted`
 - `QuestionnaireImported`, `QuestionnaireMatched`, `QuestionnaireExported`
 - `QuestionnaireColumnMapSet`, `QuestionnaireColumnMapValidated`
 - `SOPCreated`, `SOPSubmittedForReview`, `SOPApproved`, `SOPPublished`
