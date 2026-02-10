@@ -1,1 +1,58 @@
-// Command scaffold placeholder.
+use crate::error_map::{map_core_error, AppErrorDto};
+use core::storage::db::SqliteDb;
+use core::storage::{self, vault_db_path};
+use std::path::Path;
+
+#[derive(Debug, Clone)]
+pub struct LicenseStatusDto {
+    pub installed: bool,
+    pub valid: bool,
+    pub license_id: Option<String>,
+    pub features: Vec<String>,
+    pub verification_status: Option<String>,
+}
+
+impl From<storage::LicenseStatus> for LicenseStatusDto {
+    fn from(value: storage::LicenseStatus) -> Self {
+        Self {
+            installed: value.installed,
+            valid: value.valid,
+            license_id: value.license_id,
+            features: value.features,
+            verification_status: value.verification_status,
+        }
+    }
+}
+
+pub fn license_install(
+    vault_root: &str,
+    license_path: &str,
+    actor: &str,
+) -> Result<LicenseStatusDto, AppErrorDto> {
+    let root = Path::new(vault_root);
+    let db = SqliteDb::new(&vault_db_path(root));
+    db.migrate().map_err(map_core_error)?;
+
+    let st = storage::license_install_from_path(&db, root, Path::new(license_path), actor)
+        .map_err(map_core_error)?;
+
+    Ok(st.into())
+}
+
+pub fn license_status(vault_root: &str) -> Result<LicenseStatusDto, AppErrorDto> {
+    let root = Path::new(vault_root);
+    let db = SqliteDb::new(&vault_db_path(root));
+    db.migrate().map_err(map_core_error)?;
+
+    let st = storage::license_status(&db, root).map_err(map_core_error)?;
+    Ok(st.into())
+}
+
+pub fn require_export_packs_feature(vault_root: &str) -> Result<(), AppErrorDto> {
+    let root = Path::new(vault_root);
+    let db = SqliteDb::new(&vault_db_path(root));
+    db.migrate().map_err(map_core_error)?;
+
+    storage::require_license_feature(&db, root, "EXPORT_PACKS").map_err(map_core_error)?;
+    Ok(())
+}

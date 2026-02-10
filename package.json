@@ -1,7 +1,6 @@
 {
   "name": "compliance-suite",
   "private": true,
-  "packageManager": "pnpm@10.29.1",
   "scripts": {
     "lint": "bash scripts/lint.sh",
     "typecheck": "bash scripts/typecheck.sh",

@@ -1,12 +1,12 @@
 use crate::domain::errors::{CoreError, CoreErrorCode, CoreResult};
+use crate::util::shell;
 use std::path::Path;
-use std::process::{Command, Stdio};
 
 pub fn sha256_hex_file(path: &Path) -> CoreResult<String> {
-    let out = Command::new("shasum")
-        .args(["-a", "256", path.to_string_lossy().as_ref()])
-        .output()
-        .map_err(|e| CoreError::new(CoreErrorCode::IoError, e.to_string()))?;
+    let caps = shell::capabilities();
+    caps.require_shasum()?;
+
+    let out = shell::run_capture("shasum", &["-a", "256", path.to_string_lossy().as_ref()])?;
 
     if !out.status.success() {
         let stderr = String::from_utf8_lossy(&out.stderr);
@@ -20,26 +20,10 @@ pub fn sha256_hex_file(path: &Path) -> CoreResult<String> {
 }
 
 pub fn sha256_hex_bytes(bytes: &[u8]) -> CoreResult<String> {
-    let mut child = Command::new("shasum")
-        .args(["-a", "256"])
-        .stdin(Stdio::piped())
-        .stdout(Stdio::piped())
-        .stderr(Stdio::piped())
-        .spawn()
-        .map_err(|e| CoreError::new(CoreErrorCode::IoError, e.to_string()))?;
+    let caps = shell::capabilities();
+    caps.require_shasum()?;
 
-    {
-        use std::io::Write;
-        let mut stdin = child
-            .stdin
-            .take()
-            .ok_or_else(|| CoreError::new(CoreErrorCode::IoError, "shasum stdin unavailable"))?;
-        stdin.write_all(bytes)?;
-    }
-
-    let out = child
-        .wait_with_output()
-        .map_err(|e| CoreError::new(CoreErrorCode::IoError, e.to_string()))?;
+    let out = shell::run_capture_stdin("shasum", &["-a", "256"], bytes)?;
 
     if !out.status.success() {
         let stderr = String::from_utf8_lossy(&out.stderr);

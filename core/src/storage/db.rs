@@ -1,7 +1,7 @@
 use crate::domain::errors::{CoreError, CoreErrorCode, CoreResult};
+use crate::util::shell;
 use std::fs;
 use std::path::{Path, PathBuf};
-use std::process::Command;
 
 pub struct SqliteDb {
     path: PathBuf,
@@ -24,12 +24,19 @@ impl SqliteDb {
     }
 
     pub fn exec_batch(&self, sql: &str) -> CoreResult<()> {
-        let out = Command::new("sqlite3")
-            .args(["-batch", "-bail"])
-            .arg(self.path.to_string_lossy().as_ref())
-            .arg(format!("PRAGMA foreign_keys=ON; {}", sql))
-            .output()
-            .map_err(|e| CoreError::new(CoreErrorCode::IoError, e.to_string()))?;
+        let caps = shell::capabilities();
+        caps.require_sqlite3()?;
+
+        let cmd = format!("PRAGMA foreign_keys=ON; {}", sql);
+        let out = shell::run_capture(
+            "sqlite3",
+            &[
+                "-batch",
+                "-bail",
+                self.path.to_string_lossy().as_ref(),
+                cmd.as_str(),
+            ],
+        )?;
 
         if !out.status.success() {
             let stderr = String::from_utf8_lossy(&out.stderr);
@@ -43,12 +50,22 @@ impl SqliteDb {
 
     pub fn query_rows_tsv(&self, sql: &str) -> CoreResult<Vec<Vec<String>>> {
         // Use a tab separator to reduce collisions.
-        let out = Command::new("sqlite3")
-            .args(["-batch", "-bail", "-noheader", "-separator", "\t"])
-            .arg(self.path.to_string_lossy().as_ref())
-            .arg(format!("PRAGMA foreign_keys=ON; {}", sql))
-            .output()
-            .map_err(|e| CoreError::new(CoreErrorCode::IoError, e.to_string()))?;
+        let caps = shell::capabilities();
+        caps.require_sqlite3()?;
+
+        let cmd = format!("PRAGMA foreign_keys=ON; {}", sql);
+        let out = shell::run_capture(
+            "sqlite3",
+            &[
+                "-batch",
+                "-bail",
+                "-noheader",
+                "-separator",
+                "\t",
+                self.path.to_string_lossy().as_ref(),
+                cmd.as_str(),
+            ],
+        )?;
 
         if !out.status.success() {
             let stderr = String::from_utf8_lossy(&out.stderr);

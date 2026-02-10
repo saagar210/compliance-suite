@@ -8,3 +8,4 @@ name = "core"
 path = "src/lib.rs"
 
 [dependencies]
+ed25519-dalek = { version = "2.1.1", features = ["std"] }

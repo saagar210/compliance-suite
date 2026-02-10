@@ -11,16 +11,14 @@ _Last updated: 2026-02-10_
 - Phase 1.2 Evidence filesystem import (core)
 - Phase 1.3 Audit event store + hash chain validation (core)
 - Phase 1.4 Deterministic export packs + golden tests (core)
+- Phase 1.5 Licensing (core verification + storage + audit events; app command gating; DTO mirrors)
 
 ## What is in progress
-- Phase 1.5 Licensing (signed license verification, storage, audit events, feature gating)
+- Nothing in progress
 
 ## Next steps (ordered)
-1. Decide and document dependency policy (shell-out boundary + Windows unblock plan)
-2. Decide and document platform scope for release 0.1
-3. Implement licensing verification + storage + audit events in `core/`
-4. Implement app command gating + DTOs mirrored in `packages/types`
-5. Add tests + fixtures for valid/invalid licensing flows
+1. Phase 2.1 Questionnaire importer + column profiling (depends on Phase 1.5 complete)
+2. Add a small vault CLI (optional) only if it calls the same core APIs (no duplicated logic)
 
 ## Verification summary
 - Last run (2026-02-10): PASS

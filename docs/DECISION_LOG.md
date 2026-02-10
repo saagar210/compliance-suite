@@ -46,3 +46,26 @@ This log records decisions that affect architecture, portability, determinism, i
   - Adds dependency footprint and requires careful version pinning.
 - Revisit trigger:
   - Any planned Windows deliverable or CI matrix expansion.
+
+## 2026-02-10 — Add Ed25519 verification dependency
+- Decision:
+  - Add `ed25519-dalek` to `core/` to implement Ed25519 license signature verification.
+- Rationale:
+  - Phase 1.5 requires signed offline licenses with Ed25519 verification.
+  - Implementing Ed25519 safely without a well-maintained crate is not reasonable.
+- Tradeoffs:
+  - Adds a crypto dependency (supply-chain and update management considerations).
+- Revisit trigger:
+  - If we adopt a broader crypto strategy (for example `ring`) or need FIPS-aligned primitives.
+
+## 2026-02-10 — Development license fixtures policy
+- Decision:
+  - Keep `fixtures/licenses/*.json` strictly for automated tests and local development.
+  - Do not ship fixtures in production bundles.
+  - Replace `core/src/domain/license.rs` embedded public key before release.
+- Rationale:
+  - Tests require a known-good signed payload without storing any private signing material.
+- Tradeoffs:
+  - Anyone with access to fixtures can use the dev license unless the public key is rotated.
+- Revisit trigger:
+  - Before any external distribution or monetization release.

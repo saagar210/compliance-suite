@@ -22,3 +22,11 @@ export type EvidenceDto = {
   created_at: string;
   notes?: string;
 };
+
+export type LicenseStatusDto = {
+  installed: boolean;
+  valid: boolean;
+  license_id?: string;
+  features: string[];
+  verification_status?: string;
+};

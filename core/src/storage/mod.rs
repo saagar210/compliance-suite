@@ -6,6 +6,10 @@ use crate::audit::canonical::CanonicalJson;
 use crate::audit::validator;
 use crate::domain::errors::{CoreError, CoreErrorCode, CoreResult};
 use crate::domain::ids::Ulid;
+use crate::domain::license::{
+    LicenseFile, LicensePayload, LICENSE_VERIFICATION_STATUS_INVALID,
+    LICENSE_VERIFICATION_STATUS_VALID,
+};
 use crate::domain::time::DETERMINISTIC_TIMESTAMP_UTC;
 use crate::storage::db::SqliteDb;
 use std::path::{Path, PathBuf};
@@ -32,6 +36,15 @@ pub struct EvidenceItem {
     pub tags: Vec<String>,
     pub created_at: String,
     pub notes: Option<String>,
+}
+
+#[derive(Debug, Clone)]
+pub struct LicenseStatus {
+    pub installed: bool,
+    pub valid: bool,
+    pub license_id: Option<String>,
+    pub features: Vec<String>,
+    pub verification_status: Option<String>,
 }
 
 pub fn vault_db_path(vault_root: &Path) -> PathBuf {
@@ -171,6 +184,177 @@ pub fn evidence_add(
         created_at,
         notes: None,
     })
+}
+
+pub fn license_install_from_path(
+    db: &SqliteDb,
+    vault_root: &Path,
+    license_path: &Path,
+    actor: &str,
+) -> CoreResult<LicenseStatus> {
+    validator::validate_chain(db)?;
+    let vault = load_vault_row(db, vault_root)?;
+
+    if !license_path.exists() {
+        return Err(CoreError::new(
+            CoreErrorCode::NotFound,
+            "license file not found",
+        ));
+    }
+
+    let s = crate::util::fs::read_to_string(license_path)?;
+    let license = LicenseFile::parse_json_str(&s)?;
+
+    let installed_at = DETERMINISTIC_TIMESTAMP_UTC.to_string();
+    let payload_c14n = license.payload.to_canonical_string();
+
+    let verify_ok = crate::domain::license::verify_license(&license).is_ok();
+    let verification_status = if verify_ok {
+        LICENSE_VERIFICATION_STATUS_VALID
+    } else {
+        LICENSE_VERIFICATION_STATUS_INVALID
+    };
+
+    let insert_sql = format!(
+        "INSERT INTO license_install (license_id, vault_id, installed_at, payload_json, signature_hex, verification_status, verified_at) VALUES ({}, {}, {}, {}, {}, {}, {});",
+        db.q(&license.payload.license_id),
+        db.q(&vault.vault_id),
+        db.q(&installed_at),
+        db.q(&payload_c14n),
+        db.q(&license.signature_hex),
+        db.q(verification_status),
+        db.q(&installed_at),
+    );
+
+    let installed_event_sql =
+        build_event_insert_sql(db, &vault.vault_id, actor, "LicenseInstalled", {
+            let mut o = CanonicalJson::object();
+            o.insert(
+                "license_id",
+                CanonicalJson::String(license.payload.license_id.clone()),
+            );
+            o
+        })?;
+
+    let validation_event_sql = build_event_insert_sql(
+        db,
+        &vault.vault_id,
+        actor,
+        if verify_ok {
+            "LicenseValidated"
+        } else {
+            "LicenseRejected"
+        },
+        {
+            let mut o = CanonicalJson::object();
+            o.insert(
+                "license_id",
+                CanonicalJson::String(license.payload.license_id.clone()),
+            );
+            o.insert(
+                "status",
+                CanonicalJson::String(verification_status.to_string()),
+            );
+            o
+        },
+    )?;
+
+    let script = format!(
+        "BEGIN;\n{}\n{}\n{}\nCOMMIT;",
+        insert_sql, installed_event_sql, validation_event_sql
+    );
+    db.exec_batch(&script)?;
+
+    let status = LicenseStatus {
+        installed: true,
+        valid: verify_ok,
+        license_id: Some(license.payload.license_id.clone()),
+        features: license.payload.features.clone(),
+        verification_status: Some(verification_status.to_string()),
+    };
+
+    if verify_ok {
+        Ok(status)
+    } else {
+        Err(CoreError::new(
+            CoreErrorCode::LicenseInvalid,
+            "license rejected",
+        ))
+    }
+}
+
+pub fn license_status(db: &SqliteDb, vault_root: &Path) -> CoreResult<LicenseStatus> {
+    let vault = load_vault_row(db, vault_root)?;
+    let rows = db.query_rows_tsv(&format!(
+        "SELECT license_id, payload_json, signature_hex, verification_status FROM license_install WHERE vault_id={} ORDER BY installed_at DESC LIMIT 1;",
+        db.q(&vault.vault_id)
+    ))?;
+
+    if rows.is_empty() {
+        return Ok(LicenseStatus {
+            installed: false,
+            valid: false,
+            license_id: None,
+            features: vec![],
+            verification_status: None,
+        });
+    }
+
+    let r = &rows[0];
+    if r.len() < 4 {
+        return Err(CoreError::new(
+            CoreErrorCode::CorruptVault,
+            "unexpected license row",
+        ));
+    }
+
+    let license_id = r[0].clone();
+    let payload_json = r[1].clone();
+    let signature_hex = r[2].clone();
+    let verification_status = r[3].clone();
+
+    let payload = LicensePayload::parse_canonical_json_str(&payload_json)?;
+    let license = LicenseFile {
+        payload: payload.clone(),
+        signature_hex,
+    };
+
+    let valid = crate::domain::license::verify_license(&license).is_ok();
+
+    Ok(LicenseStatus {
+        installed: true,
+        valid,
+        license_id: Some(license_id),
+        features: payload.features,
+        verification_status: if verification_status.is_empty() {
+            None
+        } else {
+            Some(verification_status)
+        },
+    })
+}
+
+pub fn require_license_feature(db: &SqliteDb, vault_root: &Path, feature: &str) -> CoreResult<()> {
+    let st = license_status(db, vault_root)?;
+    if !st.installed {
+        return Err(CoreError::new(
+            CoreErrorCode::LicenseRequired,
+            "license required",
+        ));
+    }
+    if !st.valid {
+        return Err(CoreError::new(
+            CoreErrorCode::LicenseInvalid,
+            "license invalid",
+        ));
+    }
+    if !st.features.iter().any(|f| f == feature) {
+        return Err(CoreError::new(
+            CoreErrorCode::LicenseRequired,
+            "feature not licensed",
+        ));
+    }
+    Ok(())
 }
 
 fn load_vault_row(db: &SqliteDb, vault_root: &Path) -> CoreResult<Vault> {
