@@ -1,0 +1,10 @@
+{
+  "name": "@compliance-suite/app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node -e \"console.log('app: no build yet')\"",
+    "test": "node -e \"console.log('app: no tests yet')\""
+  }
+}
