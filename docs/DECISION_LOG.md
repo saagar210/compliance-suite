@@ -97,3 +97,20 @@ This log records decisions that affect architecture, portability, determinism, i
 - Revisit trigger:
   - When UI form validation is implemented (candidate: adopt Zod with an explicit dependency decision).
   - When export packs start including questionnaire artifacts that depend on mapping/profiling content.
+
+## 2026-02-10 — Answer Bank CRUD policy (Phase 2.3)
+- Decision:
+  - Dedupe policy: allow multiple entries with the same `content_hash` (no uniqueness constraint). UI can surface duplicates later using `content_hash`.
+  - Tags/evidence links storage: keep as JSON arrays in SQLite (`tags_json`, `evidence_links_json`) but normalize deterministically on write (trim, drop empties, dedupe, sort).
+  - Timestamp policy: store `created_at`/`updated_at` for entries, but do not use timestamps for deterministic ordering. Ordering for list/search is `question_canonical ASC, entry_id ASC`.
+  - Delete policy: hard-delete rows from the table, with an `AnswerBankEntryDeleted` audit event recorded (entry_id + content_hash) for auditability.
+- Rationale:
+  - Avoids blocking workflows due to accidental duplicates while still enabling later dedupe UX.
+  - JSON arrays are sufficient for Phase 2 and keep schema simple under offline-first constraints.
+  - Deterministic ordering must not depend on timestamps (which may be variable across runs/environments).
+- Tradeoffs:
+  - Hard deletes remove row history from SQLite; the audit log is the source of truth for change history.
+  - JSON arrays limit queryability vs a join table; acceptable for Phase 2 scale.
+- Revisit trigger:
+  - If we need “search by tag” or “evidence coverage” queries at scale (consider join tables + indexes).
+  - If we need soft-delete semantics for recovery or regulatory retention.

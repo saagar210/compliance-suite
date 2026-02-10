@@ -5,6 +5,7 @@
 
 pub mod prelude;
 
+pub mod answer_bank;
 pub mod audit;
 pub mod domain;
 pub mod export;

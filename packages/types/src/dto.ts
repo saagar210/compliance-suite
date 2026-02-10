@@ -59,3 +59,48 @@ export type ColumnMapValidationDto = {
   ok: boolean;
   issues: ColumnMapValidationIssueDto[];
 };
+
+// Phase 2.3 (Answer Bank)
+export type AnswerBankEntryDto = {
+  entry_id: string;
+  vault_id: string;
+  question_canonical: string;
+  answer_short: string;
+  answer_long: string;
+  notes?: string;
+  evidence_links: string[];
+  owner: string;
+  last_reviewed_at?: string;
+  tags: string[];
+  source: 'manual' | 'import' | 'match' | string;
+  content_hash: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AnswerBankCreateInputDto = {
+  question_canonical: string;
+  answer_short: string;
+  answer_long: string;
+  notes?: string;
+  evidence_links: string[];
+  owner: string;
+  last_reviewed_at?: string;
+  tags: string[];
+  source: 'manual' | 'import' | 'match' | string;
+};
+
+export type AnswerBankUpdatePatchDto = Partial<
+  Omit<AnswerBankCreateInputDto, 'evidence_links'> & {
+    evidence_links: string[];
+  }
+> & {
+  // Explicitly allow clearing notes/last_reviewed_at by passing null (mapped to None).
+  notes?: string | null;
+  last_reviewed_at?: string | null;
+};
+
+export type AnswerBankListParamsDto = {
+  limit: number;
+  offset: number;
+};

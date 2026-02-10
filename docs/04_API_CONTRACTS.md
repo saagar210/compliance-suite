@@ -51,10 +51,13 @@ Commands return DTOs only (no internal structs). DTOs are mirrored in `/packages
 - `qna_export(import_id, export_path, options?) -> ExportResultDto`
 
 ### Answer bank
-- `answer_list(filters?) -> AnswerBankEntryDto[]`
-- `answer_create(entry) -> AnswerBankEntryDto`
-- `answer_update(entry_id, patch) -> AnswerBankEntryDto`
-- `answer_link_evidence(entry_id, evidence_id) -> AnswerBankEntryDto`
+- `ab_list_entries(params) -> AnswerBankEntryDto[]`
+- `ab_create_entry(input) -> AnswerBankEntryDto`
+- `ab_get_entry(entry_id) -> AnswerBankEntryDto`
+- `ab_update_entry(entry_id, patch) -> AnswerBankEntryDto`
+- `ab_delete_entry(entry_id) -> void`
+- `ab_search_entries(query, params) -> AnswerBankEntryDto[]`
+- `ab_link_evidence(entry_id, evidence_id) -> AnswerBankEntryDto`
 
 ### Binder
 - `control_list(framework?) -> ControlDto[]`
