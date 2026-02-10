@@ -19,6 +19,11 @@ Recommended codes:
 - `UNSUPPORTED_FORMAT`
 - `INTERNAL_ERROR`
 
+## Capability errors (required tooling)
+If a required local tool is missing (for example `sqlite3`, `shasum`, `zip`, `unzip`, `bash`):
+- Return `MISSING_CAPABILITY` (not `CORRUPT_VAULT` / not a “corrupt file” classification).
+- Include a clear message naming the missing tool (for example: "required tool missing: unzip").
+
 ## Core principles
 1. **Fail fast on invalid input** (Zod in UI + Rust validation in core).
 2. **No silent defaults** when values should be required.

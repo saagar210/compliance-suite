@@ -43,6 +43,8 @@ Questionnaire import results must be repeatable for the same input file bytes:
 
 Validation and mapping must never silently default missing required fields (question/answer columns).
 
+When persisting questionnaire-related JSON blobs (for example column maps or samples), prefer canonical JSON encoding with stable key ordering to avoid cross-run diffs that are unrelated to meaning.
+
 ### Optional signed export packs
 - For portfolio and high-assurance: sign the manifest with a local key (user-generated) or vendor key.
 - This can be Phase 5.

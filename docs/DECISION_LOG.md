@@ -80,3 +80,20 @@ This log records decisions that affect architecture, portability, determinism, i
   - Adds another stable error code to keep in sync across Rust core and TS DTO mirrors.
 - Revisit trigger:
   - When we replace shell-outs with native crates (capability errors should map to dependency presence/config instead).
+
+## 2026-02-10 — Phase 2 dependency + determinism policy clarifications
+- Decision:
+  - No new dependencies (Rust or TypeScript) without a Decision Log entry (rationale + tradeoffs) and same-PR updates to affected docs/tests/fixtures.
+  - TypeScript runtime validation is currently implemented as a temporary stopgap in `packages/types/src/validators.ts` (no Zod yet). Adoption of Zod is deferred until we explicitly approve a dependency update.
+  - Persisted JSON blobs that participate in integrity or deterministic workflows must be canonicalized:
+    - Stable key ordering (sorted keys) and stable encoding (UTF-8)
+    - No inclusion of volatile fields (timestamps, actor) in any hashed/canonical content used for integrity or deterministic exports
+- Rationale:
+  - Phase 2 introduced persisted questionnaire mapping/profiling JSON; without explicit canonicalization rules, cross-run diffs become noisy and integrity checks become ambiguous.
+  - Offline-first constraints require that we are deliberate about dependency introduction (especially runtime validators for UI contracts).
+- Tradeoffs:
+  - Stopgap validators are less ergonomic than Zod schemas and can diverge if not maintained with discipline.
+  - Canonicalization rules can add friction when adding new fields; mitigated by tests and clear DTO mirroring.
+- Revisit trigger:
+  - When UI form validation is implemented (candidate: adopt Zod with an explicit dependency decision).
+  - When export packs start including questionnaire artifacts that depend on mapping/profiling content.
