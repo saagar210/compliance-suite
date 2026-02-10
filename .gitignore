@@ -1,0 +1,7 @@
+.DS_Store
+node_modules/
+target/
+.pnpm-store/
+.worktrees/
+*.log
+.DS_Store?
