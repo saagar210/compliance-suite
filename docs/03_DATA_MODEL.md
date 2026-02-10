@@ -172,6 +172,7 @@ Represents a particular questionnaire file imported.
 - `DocumentCreated`, `DocumentVersionAdded`
 - `ControlCreated`, `ControlUpdated`, `ControlMappedEvidence`
 - `QuestionnaireImported`, `QuestionnaireMatched`, `QuestionnaireExported`
+- `QuestionnaireColumnMapSet`, `QuestionnaireColumnMapValidated`
 - `SOPCreated`, `SOPSubmittedForReview`, `SOPApproved`, `SOPPublished`
 - `ExportPackGenerated`
 - `LicenseInstalled`, `LicenseValidated`, `LicenseRejected`

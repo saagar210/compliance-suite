@@ -8,5 +8,6 @@ pub mod prelude;
 pub mod audit;
 pub mod domain;
 pub mod export;
+pub mod questionnaire;
 pub mod storage;
 pub mod util;

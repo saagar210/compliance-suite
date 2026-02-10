@@ -30,3 +30,32 @@ export type LicenseStatusDto = {
   features: string[];
   verification_status?: string;
 };
+
+// Phase 2 (Questionnaire Autopilot)
+export type ColumnMapDto = {
+  question: string;
+  answer: string;
+  notes?: string;
+};
+
+export type QuestionnaireImportDto = {
+  import_id: string;
+  vault_id: string;
+  source_filename: string;
+  source_sha256: string;
+  imported_at: string;
+  format: 'csv' | 'xlsx';
+  status: 'imported' | 'mapped' | string;
+  column_map?: ColumnMapDto;
+};
+
+export type ColumnMapValidationIssueDto = {
+  code: string;
+  message: string;
+  field?: 'question' | 'answer' | 'notes' | string;
+};
+
+export type ColumnMapValidationDto = {
+  ok: boolean;
+  issues: ColumnMapValidationIssueDto[];
+};
