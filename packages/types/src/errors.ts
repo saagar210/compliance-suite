@@ -4,6 +4,7 @@ export type AppErrorCode =
   | 'CONFLICT'
   | 'PERMISSION_DENIED'
   | 'IO_ERROR'
+  | 'MISSING_CAPABILITY'
   | 'DB_ERROR'
   | 'MIGRATION_REQUIRED'
   | 'CORRUPT_VAULT'

@@ -69,3 +69,14 @@ This log records decisions that affect architecture, portability, determinism, i
   - Anyone with access to fixtures can use the dev license unless the public key is rotated.
 - Revisit trigger:
   - Before any external distribution or monetization release.
+
+## 2026-02-10 — Add explicit missing capability error code
+- Decision:
+  - Introduce `MISSING_CAPABILITY` as a stable error code for missing required local tooling (for example `sqlite3`, `shasum`, `zip`, `unzip`, `bash`).
+- Rationale:
+  - Missing OS tools is a common offline-first failure mode and should not be conflated with corrupt vault data.
+  - A dedicated code allows UI/runbooks to show clear “install tool X” guidance.
+- Tradeoffs:
+  - Adds another stable error code to keep in sync across Rust core and TS DTO mirrors.
+- Revisit trigger:
+  - When we replace shell-outs with native crates (capability errors should map to dependency presence/config instead).

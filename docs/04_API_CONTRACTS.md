@@ -43,6 +43,7 @@ Commands return DTOs only (no internal structs). DTOs are mirrored in `/packages
 - `qna_import(file_path) -> QuestionnaireImportDto`
 - `qna_get_columns(import_id) -> ColumnProfileDto`
 - `qna_set_column_map(import_id, map) -> QuestionnaireImportDto`
+- `qna_validate_column_map(import_id) -> ColumnMapValidationDto`
 - `qna_list_questions(import_id, filters?) -> QuestionDto[]`
 - `qna_run_matching(import_id, params?) -> MatchRunDto`
 - `qna_accept_suggestion(q_id, suggestion_id) -> QuestionDto`

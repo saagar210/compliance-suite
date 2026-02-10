@@ -383,7 +383,7 @@ fn load_vault_row(db: &SqliteDb, vault_root: &Path) -> CoreResult<Vault> {
     })
 }
 
-fn build_event_insert_sql(
+pub(crate) fn build_event_insert_sql(
     db: &SqliteDb,
     vault_id: &str,
     actor: &str,

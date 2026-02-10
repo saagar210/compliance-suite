@@ -27,7 +27,7 @@ impl ShellCapabilities {
             Ok(())
         } else {
             Err(CoreError::new(
-                CoreErrorCode::IoError,
+                CoreErrorCode::MissingCapability,
                 "required tool missing: sqlite3",
             ))
         }
@@ -38,7 +38,7 @@ impl ShellCapabilities {
             Ok(())
         } else {
             Err(CoreError::new(
-                CoreErrorCode::IoError,
+                CoreErrorCode::MissingCapability,
                 "required tool missing: shasum",
             ))
         }
@@ -49,7 +49,7 @@ impl ShellCapabilities {
             Ok(())
         } else {
             Err(CoreError::new(
-                CoreErrorCode::IoError,
+                CoreErrorCode::MissingCapability,
                 "required tool missing: zip",
             ))
         }
@@ -60,7 +60,7 @@ impl ShellCapabilities {
             Ok(())
         } else {
             Err(CoreError::new(
-                CoreErrorCode::IoError,
+                CoreErrorCode::MissingCapability,
                 "required tool missing: unzip",
             ))
         }
@@ -71,7 +71,7 @@ impl ShellCapabilities {
             Ok(())
         } else {
             Err(CoreError::new(
-                CoreErrorCode::IoError,
+                CoreErrorCode::MissingCapability,
                 "required tool missing: bash",
             ))
         }

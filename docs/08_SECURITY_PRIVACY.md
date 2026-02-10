@@ -30,6 +30,19 @@ Determinism policy must be written and tested:
   - do not include OS file mtime in hash
   - if you include timestamps, include them in manifest but not in the hash computation, or canonicalize them (e.g., export time only).
 
+### Deterministic imports (questionnaires)
+Questionnaire import results must be repeatable for the same input file bytes:
+- Stable (must match on re-import of identical file):
+  - `source_sha256`
+  - detected column identifiers (CSV header names; XLSX column letters) and their ordering
+  - column profiling metrics derived from cell contents (counts, sampled values) for a fixed sampling window
+- Variable (allowed to differ run-to-run):
+  - `import_id`
+  - `imported_at`
+  - `actor` (if stored or emitted in audit events)
+
+Validation and mapping must never silently default missing required fields (question/answer columns).
+
 ### Optional signed export packs
 - For portfolio and high-assurance: sign the manifest with a local key (user-generated) or vendor key.
 - This can be Phase 5.
