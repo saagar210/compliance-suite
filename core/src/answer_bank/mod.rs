@@ -368,6 +368,7 @@ pub fn ab_delete_entry(db: &SqliteDb, entry_id: &str, actor: &str) -> CoreResult
 }
 
 pub fn ab_list_entries(db: &SqliteDb, params: ListParams) -> CoreResult<Vec<AnswerBankEntry>> {
+    validate_list_params(&params)?;
     let vault_id = load_vault_id(db)?;
     let rows = db.query_rows_tsv(&format!(
         "SELECT entry_id FROM answer_bank WHERE vault_id={} ORDER BY question_canonical ASC, entry_id ASC LIMIT {} OFFSET {};",
@@ -389,6 +390,7 @@ pub fn ab_search_entries(
     query: &str,
     params: ListParams,
 ) -> CoreResult<Vec<AnswerBankEntry>> {
+    validate_list_params(&params)?;
     let vault_id = load_vault_id(db)?;
     let q = normalize_text_optional(query);
     if q.is_empty() {
@@ -591,4 +593,20 @@ fn compute_changed_fields(before: &AnswerBankEntry, after: &AnswerBankEntry) -> 
     }
     fields.sort();
     fields
+}
+
+fn validate_list_params(params: &ListParams) -> CoreResult<()> {
+    if params.limit <= 0 {
+        return Err(CoreError::new(
+            CoreErrorCode::ValidationError,
+            "limit must be > 0",
+        ));
+    }
+    if params.offset < 0 {
+        return Err(CoreError::new(
+            CoreErrorCode::ValidationError,
+            "offset must be >= 0",
+        ));
+    }
+    Ok(())
 }

@@ -174,6 +174,27 @@ fn answer_bank_validation_errors_are_stable() -> CoreResult<()> {
     .unwrap_err();
     assert_eq!(err.code, CoreErrorCode::ValidationError);
 
+    let err = answer_bank::ab_list_entries(
+        &db,
+        ListParams {
+            limit: 0,
+            offset: 0,
+        },
+    )
+    .unwrap_err();
+    assert_eq!(err.code, CoreErrorCode::ValidationError);
+
+    let err = answer_bank::ab_search_entries(
+        &db,
+        "anything",
+        ListParams {
+            limit: 10,
+            offset: -1,
+        },
+    )
+    .unwrap_err();
+    assert_eq!(err.code, CoreErrorCode::ValidationError);
+
     let _ = std::fs::remove_dir_all(&vault_root);
     Ok(())
 }
