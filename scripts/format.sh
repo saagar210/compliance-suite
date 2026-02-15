@@ -6,6 +6,4 @@ cargo fmt --all
 
 echo ""
 echo "=== Formatting TypeScript code ==="
-cd apps/questionnaire
-npx prettier --write "src/**/*.{ts,tsx,js,jsx,json,css}"
-cd ../..
+pnpm --dir apps/questionnaire exec prettier --write "src/**/*.{ts,tsx,js,jsx,json,css}"

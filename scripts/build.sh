@@ -8,16 +8,8 @@ echo "Building Rust core library..."
 cargo build --workspace
 
 echo ""
-echo "Building Questionnaire app (frontend)..."
-cd apps/questionnaire
-npm run build
-cd ../..
-
-echo ""
 echo "Building Tauri desktop app..."
-cd apps/questionnaire
-npm run tauri build
-cd ../..
+pnpm --dir apps/questionnaire run tauri build
 
 echo ""
 echo "=== Build Complete ==="

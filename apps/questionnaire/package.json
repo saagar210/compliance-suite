@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "pnpm run build:frontend",
+    "build:frontend": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
     "lint": "eslint src --ext ts,tsx --no-eslintrc --config .eslintrc.json",

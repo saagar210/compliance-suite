@@ -16,7 +16,8 @@ export default function ColumnMapTable({ onComplete }: ColumnMapTableProps) {
 
   // Auto-detect columns based on labels
   useEffect(() => {
-    if (columnProfiles.length > 0) {
+    // Only auto-detect once per import payload; do not override user selection.
+    if (!questionCol && !answerCol && !notesCol && columnProfiles.length > 0) {
       // Simple heuristic: look for columns with "question" and "answer" in their labels
       const qCol = columnProfiles.find((p) => p.label.toLowerCase().includes("question"));
       const aCol = columnProfiles.find((p) => p.label.toLowerCase().includes("answer"));
@@ -29,7 +30,7 @@ export default function ColumnMapTable({ onComplete }: ColumnMapTableProps) {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [columnProfiles]);
+  }, [columnProfiles, questionCol, answerCol, notesCol]);
 
   const handleSave = async () => {
     if (!currentImport || !questionCol || !answerCol) {

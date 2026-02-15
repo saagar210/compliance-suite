@@ -4,9 +4,9 @@
   "version": "0.1.0",
   "identifier": "com.compliancesuite.questionnaire",
   "build": {
-    "beforeDevCommand": "cd .. && npm run dev",
+    "beforeDevCommand": "pnpm run dev",
     "devUrl": "http://localhost:5173",
-    "beforeBuildCommand": "cd .. && npm run build",
+    "beforeBuildCommand": "pnpm run build:frontend",
     "frontendDist": "../dist"
   },
   "bundle": {

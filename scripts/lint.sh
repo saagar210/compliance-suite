@@ -7,6 +7,4 @@ cargo clippy --workspace --all-targets -- -D warnings
 
 echo ""
 echo "=== Running TypeScript linting ==="
-cd apps/questionnaire
-npm run lint
-cd ../..
+pnpm --dir apps/questionnaire run lint

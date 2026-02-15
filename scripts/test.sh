@@ -9,9 +9,7 @@ cargo test -p core
 
 echo ""
 echo "Running Questionnaire app tests (Vitest)..."
-cd apps/questionnaire
-npm test -- --run
-cd ../..
+pnpm --dir apps/questionnaire exec vitest run
 
 echo ""
 echo "=== All Tests Complete ==="

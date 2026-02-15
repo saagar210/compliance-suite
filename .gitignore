@@ -6,3 +6,8 @@ target/
 wt/
 *.log
 .DS_Store?
+apps/*/dist/
+apps/*/package-lock.json
+apps/*/src-tauri/gen/
+codex/
+IMPLEMENTATION_PLAN.md

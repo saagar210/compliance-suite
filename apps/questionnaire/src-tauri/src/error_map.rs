@@ -3,7 +3,7 @@
 //! Maps core domain errors to Tauri-compatible error responses.
 //! Provides structured error information for frontend error handling.
 
-use core::domain::errors::CoreError;
+use cs_core::domain::errors::CoreError;
 use serde::{Deserialize, Serialize};
 
 /// Application error DTO for Tauri responses
@@ -58,5 +58,11 @@ impl std::fmt::Display for AppErrorDto {
                 format!(r#"{{"code":"{}","message":"{}"}}"#, self.code, self.message)
             })
         )
+    }
+}
+
+impl From<AppErrorDto> for String {
+    fn from(value: AppErrorDto) -> Self {
+        value.to_string()
     }
 }

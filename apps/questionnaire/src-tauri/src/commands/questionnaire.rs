@@ -1,10 +1,11 @@
 use crate::error_map::{map_core_error, AppErrorDto};
-use core::questionnaire;
-use core::storage::db::SqliteDb;
-use core::storage::vault_db_path;
+use cs_core::questionnaire;
+use cs_core::storage::db::SqliteDb;
+use cs_core::storage::vault_db_path;
+use serde::{Deserialize, Serialize};
 use std::path::Path;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ColumnMapDto {
     pub question: String,
     pub answer: String,
@@ -21,7 +22,7 @@ impl From<ColumnMapDto> for questionnaire::ColumnMap {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct QuestionnaireImportDto {
     pub import_id: String,
     pub vault_id: String,
@@ -52,7 +53,7 @@ impl From<questionnaire::QuestionnaireImport> for QuestionnaireImportDto {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ColumnMapValidationIssueDto {
     pub code: String,
     pub message: String,
@@ -69,7 +70,7 @@ impl From<questionnaire::ColumnMapValidationIssue> for ColumnMapValidationIssueD
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ColumnMapValidationDto {
     pub ok: bool,
     pub issues: Vec<ColumnMapValidationIssueDto>,
@@ -138,7 +139,7 @@ pub async fn import_questionnaire(
     Ok(import.into())
 }
 
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ColumnProfileDto {
     pub col_ref: String,
     pub ordinal: i64,

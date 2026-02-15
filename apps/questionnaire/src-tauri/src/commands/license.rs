@@ -1,9 +1,10 @@
 use crate::error_map::{map_core_error, AppErrorDto};
-use core::storage::db::SqliteDb;
-use core::storage::{self, vault_db_path};
+use cs_core::storage::db::SqliteDb;
+use cs_core::storage::{self, vault_db_path};
+use serde::{Deserialize, Serialize};
 use std::path::Path;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LicenseStatusDto {
     pub installed: bool,
     pub valid: bool,

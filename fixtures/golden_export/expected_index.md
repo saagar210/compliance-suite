@@ -1,6 +1,0 @@
-# Export Index
-
-## Evidence
-
-- `evidence/15/15752b3ad5b18011a50e5add45aa354770b75c07f859ec7c8c801fe49add8134_screenshot_sample.png` (15752b3ad5b18011a50e5add45aa354770b75c07f859ec7c8c801fe49add8134, 66 bytes)
-- `evidence/2c/2ccd0a5ce050f23f571cc231fe7589d886e0f97f06c8db8fd906b5698d940d64_policy_sample.pdf` (2ccd0a5ce050f23f571cc231fe7589d886e0f97f06c8db8fd906b5698d940d64, 598 bytes)

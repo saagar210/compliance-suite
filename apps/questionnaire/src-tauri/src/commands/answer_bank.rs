@@ -1,10 +1,11 @@
 use crate::error_map::{map_core_error, AppErrorDto};
-use core::answer_bank;
-use core::storage::db::SqliteDb;
-use core::storage::vault_db_path;
+use cs_core::answer_bank;
+use cs_core::storage::db::SqliteDb;
+use cs_core::storage::vault_db_path;
+use serde::{Deserialize, Serialize};
 use std::path::Path;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AnswerBankEntryDto {
     pub entry_id: String,
     pub vault_id: String,
@@ -43,7 +44,7 @@ impl From<answer_bank::AnswerBankEntry> for AnswerBankEntryDto {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AnswerBankCreateInputDto {
     pub question_canonical: String,
     pub answer_short: String,
@@ -72,7 +73,7 @@ impl From<AnswerBankCreateInputDto> for answer_bank::AnswerBankCreateInput {
     }
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AnswerBankUpdatePatchDto {
     pub question_canonical: Option<String>,
     pub answer_short: Option<String>,
@@ -101,7 +102,7 @@ impl From<AnswerBankUpdatePatchDto> for answer_bank::AnswerBankUpdatePatch {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AnswerBankListParamsDto {
     pub limit: i64,
     pub offset: i64,

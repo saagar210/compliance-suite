@@ -1,6 +1,6 @@
 use crate::app_state::AppState;
 use crate::error_map::map_core_error;
-use core::export::pack;
+use cs_core::export::pack;
 use serde::{Deserialize, Serialize};
 use std::path::Path;
 use tauri::State;

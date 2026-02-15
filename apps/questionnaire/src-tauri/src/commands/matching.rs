@@ -1,9 +1,9 @@
 use crate::app_state::AppState;
 use crate::error_map::map_core_error;
-use core::answer_bank;
-use core::questionnaire::matching::{MatchSuggestion, MatchingEngine};
-use core::storage::db::SqliteDb;
-use core::storage::vault_db_path;
+use cs_core::answer_bank;
+use cs_core::questionnaire::matching::{MatchSuggestion, MatchingEngine};
+use cs_core::storage::db::SqliteDb;
+use cs_core::storage::vault_db_path;
 use serde::{Deserialize, Serialize};
 use std::path::Path;
 use tauri::State;
