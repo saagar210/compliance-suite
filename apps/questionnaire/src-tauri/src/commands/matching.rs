@@ -44,6 +44,9 @@ pub async fn get_matching_suggestions(
     db.migrate().map_err(map_core_error)?;
 
     // Load all answer bank entries for the vault
+    // TODO: This approach does not scale. For a production system, consider using
+    // a full-text search index (e.g., SQLite FTS5) or a dedicated search service
+    // to avoid loading all entries into memory for every request.
     let params = answer_bank::ListParams {
         limit: 10000, // Large limit to get all entries
         offset: 0,
