@@ -159,10 +159,10 @@ export function isMatchSuggestionDto(value: unknown): value is MatchSuggestionDt
   return (
     !!v &&
     typeof v === 'object' &&
-    typeof v.id === 'string' &&
     typeof v.answer_bank_entry_id === 'string' &&
-    typeof v.answer_preview === 'string' &&
     typeof v.score === 'number' &&
+    typeof v.normalized_question === 'string' &&
+    typeof v.normalized_answer === 'string' &&
     typeof v.confidence_explanation === 'string'
   );
 }
