@@ -48,11 +48,40 @@ pub fn license_status(vault_root: &str) -> Result<LicenseStatusDto, AppErrorDto>
     Ok(st.into())
 }
 
-pub fn require_export_packs_feature(vault_root: &str) -> Result<(), AppErrorDto> {
+pub fn require_export_packs_feature(vault_root: &str, _actor: &str) -> Result<(), AppErrorDto> {
     let root = Path::new(vault_root);
     let db = SqliteDb::new(&vault_db_path(root));
     db.migrate().map_err(map_core_error)?;
 
     storage::require_license_feature(&db, root, "EXPORT_PACKS").map_err(map_core_error)?;
     Ok(())
+}
+
+// Tauri Command Handlers
+
+use crate::app_state::AppState;
+use tauri::State;
+
+#[tauri::command]
+pub async fn check_license_status(state: State<'_, AppState>) -> Result<LicenseStatusDto, String> {
+    let vault_path = state
+        .get_vault_path()
+        .ok_or_else(|| "No vault open".to_string())?;
+
+    let status = license_status(&vault_path).map_err(|e| e.to_string())?;
+    Ok(status)
+}
+
+#[tauri::command]
+pub async fn install_license(
+    license_path: String,
+    state: State<'_, AppState>,
+) -> Result<LicenseStatusDto, String> {
+    let vault_path = state
+        .get_vault_path()
+        .ok_or_else(|| "No vault open".to_string())?;
+
+    let status =
+        license_install(&vault_path, &license_path, &state.actor).map_err(|e| e.to_string())?;
+    Ok(status)
 }

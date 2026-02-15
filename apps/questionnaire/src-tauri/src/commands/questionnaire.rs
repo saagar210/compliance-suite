@@ -112,3 +112,87 @@ pub fn qna_validate_column_map(
         questionnaire::validate_column_map(&db, import_id, Some(actor)).map_err(map_core_error)?;
     Ok(out.into())
 }
+
+// Tauri Command Handlers
+
+use crate::app_state::AppState;
+use tauri::State;
+
+#[tauri::command]
+pub async fn import_questionnaire(
+    file_path: String,
+    state: State<'_, AppState>,
+) -> Result<QuestionnaireImportDto, String> {
+    let vault_path = state
+        .get_vault_path()
+        .ok_or_else(|| "No vault open".to_string())?;
+
+    let root = Path::new(&vault_path);
+    let db = SqliteDb::new(&vault_db_path(root));
+    db.migrate().map_err(map_core_error)?; // TODO: Move migration to vault open/creation
+
+    let import =
+        questionnaire::import_questionnaire(&db, root, Path::new(&file_path), &state.actor)
+            .map_err(map_core_error)?;
+
+    Ok(import.into())
+}
+
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct ColumnProfileDto {
+    pub col_ref: String,
+    pub ordinal: i64,
+    pub label: String,
+    pub non_empty_count: i64,
+    pub sample: Vec<String>,
+}
+
+impl From<questionnaire::ColumnProfile> for ColumnProfileDto {
+    fn from(value: questionnaire::ColumnProfile) -> Self {
+        Self {
+            col_ref: value.col_ref,
+            ordinal: value.ordinal,
+            label: value.label,
+            non_empty_count: value.non_empty_count,
+            sample: value.sample,
+        }
+    }
+}
+
+#[tauri::command]
+pub async fn get_column_profiles(
+    import_id: String,
+    state: State<'_, AppState>,
+) -> Result<Vec<ColumnProfileDto>, String> {
+    let vault_path = state
+        .get_vault_path()
+        .ok_or_else(|| "No vault open".to_string())?;
+
+    let root = Path::new(&vault_path);
+    let db = SqliteDb::new(&vault_db_path(root));
+    db.migrate().map_err(map_core_error)?;
+
+    let cols = questionnaire::list_columns(&db, &import_id).map_err(map_core_error)?;
+
+    Ok(cols.into_iter().map(Into::into).collect())
+}
+
+#[tauri::command]
+pub async fn save_column_mapping(
+    import_id: String,
+    column_map: ColumnMapDto,
+    state: State<'_, AppState>,
+) -> Result<QuestionnaireImportDto, String> {
+    let vault_path = state
+        .get_vault_path()
+        .ok_or_else(|| "No vault open".to_string())?;
+
+    let root = Path::new(&vault_path);
+    let db = SqliteDb::new(&vault_db_path(root));
+    db.migrate().map_err(map_core_error)?;
+
+    let import = questionnaire::set_column_map(&db, &import_id, &column_map.into(), &state.actor)
+        .map_err(map_core_error)?;
+
+    Ok(import.into())
+}

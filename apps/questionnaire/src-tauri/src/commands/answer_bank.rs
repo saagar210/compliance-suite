@@ -194,3 +194,64 @@ pub fn ab_link_evidence(
         answer_bank::ab_link_evidence(&db, entry_id, evidence_id, actor).map_err(map_core_error)?;
     Ok(out.into())
 }
+
+// Tauri Command Handlers
+
+use crate::app_state::AppState;
+use tauri::State;
+
+#[tauri::command]
+pub async fn answer_bank_create(
+    input: AnswerBankCreateInputDto,
+    state: State<'_, AppState>,
+) -> Result<AnswerBankEntryDto, String> {
+    let vault_path = state
+        .get_vault_path()
+        .ok_or_else(|| "No vault open".to_string())?;
+
+    let entry = ab_create_entry(&vault_path, input, &state.actor).map_err(|e| e.to_string())?;
+    Ok(entry)
+}
+
+#[tauri::command]
+pub async fn answer_bank_update(
+    entry_id: String,
+    patch: AnswerBankUpdatePatchDto,
+    state: State<'_, AppState>,
+) -> Result<AnswerBankEntryDto, String> {
+    let vault_path = state
+        .get_vault_path()
+        .ok_or_else(|| "No vault open".to_string())?;
+
+    let entry =
+        ab_update_entry(&vault_path, &entry_id, patch, &state.actor).map_err(|e| e.to_string())?;
+    Ok(entry)
+}
+
+#[tauri::command]
+pub async fn answer_bank_delete(
+    entry_id: String,
+    state: State<'_, AppState>,
+) -> Result<(), String> {
+    let vault_path = state
+        .get_vault_path()
+        .ok_or_else(|| "No vault open".to_string())?;
+
+    ab_delete_entry(&vault_path, &entry_id, &state.actor).map_err(|e| e.to_string())?;
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn answer_bank_list(
+    limit: i64,
+    offset: i64,
+    state: State<'_, AppState>,
+) -> Result<Vec<AnswerBankEntryDto>, String> {
+    let vault_path = state
+        .get_vault_path()
+        .ok_or_else(|| "No vault open".to_string())?;
+
+    let params = AnswerBankListParamsDto { limit, offset };
+    let entries = ab_list_entries(&vault_path, params).map_err(|e| e.to_string())?;
+    Ok(entries)
+}

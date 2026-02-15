@@ -2,8 +2,10 @@
 //!
 //! Phase 2.1: import + column profiling (minimal, for mapping UX + persistence).
 //! Phase 2.2: persist column map per import and validate it before matching.
+//! Phase 2.4: matching algorithm for answer suggestions.
 
 mod csv;
+pub mod matching;
 mod xlsx;
 
 use crate::audit::canonical::CanonicalJson;

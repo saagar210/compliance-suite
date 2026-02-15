@@ -1,0 +1,32 @@
+[
+  {
+    "question": "How do you implement access control?",
+    "expected_top_answer_id": "01HWTEST001",
+    "min_score": 0.05,
+    "description": "Should match 'access control implementation' answer"
+  },
+  {
+    "question": "What authentication methods do you use?",
+    "expected_top_answer_id": "01HWTEST002",
+    "min_score": 0.05,
+    "description": "Should match 'authentication methods' answer"
+  },
+  {
+    "question": "Describe your encryption for data at rest",
+    "expected_top_answer_id": "01HWTEST003",
+    "min_score": 0.05,
+    "description": "Should match 'data encryption at rest' answer"
+  },
+  {
+    "question": "What network security controls are in place?",
+    "expected_top_answer_id": "01HWTEST004",
+    "min_score": 0.05,
+    "description": "Should match 'network security' answer"
+  },
+  {
+    "question": "How are backups performed?",
+    "expected_top_answer_id": "01HWTEST005",
+    "min_score": 0.03,
+    "description": "Should match 'backup and recovery' answer"
+  }
+]
