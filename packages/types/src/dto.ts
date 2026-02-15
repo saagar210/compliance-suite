@@ -107,13 +107,11 @@ export type AnswerBankListParamsDto = {
 
 // Phase 2.4 (Matching Algorithm)
 export type MatchSuggestionDto = {
-  id: string;
   answer_bank_entry_id: string;
-  answer_preview: string;  // First 200 chars of answer
   score: number;           // 0.0 - 1.0
+  normalized_question: string;
+  normalized_answer: string;
   confidence_explanation: string;
-  normalized_question?: string;
-  normalized_answer?: string;
 };
 
 export type MatchingInputDto = {
