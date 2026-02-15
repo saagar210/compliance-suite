@@ -63,9 +63,7 @@ use crate::app_state::AppState;
 use tauri::State;
 
 #[tauri::command]
-pub async fn check_license_status(
-    state: State<'_, AppState>,
-) -> Result<LicenseStatusDto, String> {
+pub async fn check_license_status(state: State<'_, AppState>) -> Result<LicenseStatusDto, String> {
     let vault_path = state
         .get_vault_path()
         .ok_or_else(|| "No vault open".to_string())?;

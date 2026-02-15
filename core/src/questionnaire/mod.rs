@@ -5,8 +5,8 @@
 //! Phase 2.4: matching algorithm for answer suggestions.
 
 mod csv;
-mod xlsx;
 pub mod matching;
+mod xlsx;
 
 use crate::audit::canonical::CanonicalJson;
 use crate::audit::validator;

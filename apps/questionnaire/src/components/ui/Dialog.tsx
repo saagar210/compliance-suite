@@ -38,14 +38,8 @@ const DialogContent = React.forwardRef<
 ));
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
-const DialogHeader = ({
-  className = "",
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={`flex flex-col space-y-1.5 text-center sm:text-left ${className}`}
-    {...props}
-  />
+const DialogHeader = ({ className = "", ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div className={`flex flex-col space-y-1.5 text-center sm:text-left ${className}`} {...props} />
 );
 DialogHeader.displayName = "DialogHeader";
 
@@ -73,11 +67,4 @@ const DialogDescription = React.forwardRef<
 ));
 DialogDescription.displayName = DialogPrimitive.Description.displayName;
 
-export {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-};
+export { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription };

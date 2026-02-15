@@ -77,11 +77,7 @@ impl MatchingEngine {
     }
 
     /// Generate confidence explanation from token overlap
-    fn explain_confidence(
-        score: f64,
-        q_tokens: &[String],
-        a_tokens: &[String],
-    ) -> String {
+    fn explain_confidence(score: f64, q_tokens: &[String], a_tokens: &[String]) -> String {
         let q_set: HashSet<&String> = q_tokens.iter().collect();
         let a_set: HashSet<&String> = a_tokens.iter().collect();
 
@@ -152,7 +148,11 @@ impl MatchingEngine {
             .collect();
 
         // Sort by score descending
-        suggestions.sort_by(|a, b| b.score.partial_cmp(&a.score).unwrap_or(std::cmp::Ordering::Equal));
+        suggestions.sort_by(|a, b| {
+            b.score
+                .partial_cmp(&a.score)
+                .unwrap_or(std::cmp::Ordering::Equal)
+        });
 
         // Take top N
         suggestions.truncate(top_n);
@@ -188,7 +188,11 @@ mod tests {
     #[test]
     fn test_score_tokens_partial_overlap() {
         let tokens_a = vec!["access".to_string(), "control".to_string()];
-        let tokens_b = vec!["access".to_string(), "control".to_string(), "rbac".to_string()];
+        let tokens_b = vec![
+            "access".to_string(),
+            "control".to_string(),
+            "rbac".to_string(),
+        ];
         let score = MatchingEngine::score_tokens(&tokens_a, &tokens_b);
         // 2 common / 3 total = 0.67
         assert!((score - 0.6666).abs() < 0.01);

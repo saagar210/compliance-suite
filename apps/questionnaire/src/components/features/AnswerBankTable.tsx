@@ -79,9 +79,7 @@ export default function AnswerBankTable() {
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-lg font-semibold">Answer Bank</h2>
-          <p className="text-sm text-muted-foreground">
-            Manage your answer bank entries
-          </p>
+          <p className="text-sm text-muted-foreground">Manage your answer bank entries</p>
         </div>
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogTrigger asChild>
@@ -95,18 +93,14 @@ export default function AnswerBankTable() {
               <FormField label="Question" required>
                 <Input
                   value={formData.question_canonical}
-                  onChange={(e) =>
-                    setFormData({ ...formData, question_canonical: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, question_canonical: e.target.value })}
                   placeholder="Enter the question"
                 />
               </FormField>
               <FormField label="Short Answer" required>
                 <Input
                   value={formData.answer_short}
-                  onChange={(e) =>
-                    setFormData({ ...formData, answer_short: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, answer_short: e.target.value })}
                   placeholder="Brief answer"
                 />
               </FormField>
@@ -114,9 +108,7 @@ export default function AnswerBankTable() {
                 <textarea
                   className="w-full min-h-[100px] rounded-md border border-input bg-background px-3 py-2 text-sm"
                   value={formData.answer_long}
-                  onChange={(e) =>
-                    setFormData({ ...formData, answer_long: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, answer_long: e.target.value })}
                   placeholder="Detailed answer"
                 />
               </FormField>
@@ -174,10 +166,7 @@ export default function AnswerBankTable() {
                   <TableCell>
                     <div className="flex gap-1 flex-wrap">
                       {entry.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-xs bg-secondary px-2 py-1 rounded"
-                        >
+                        <span key={tag} className="text-xs bg-secondary px-2 py-1 rounded">
                           {tag}
                         </span>
                       ))}
@@ -208,11 +197,7 @@ export default function AnswerBankTable() {
           <Button variant="outline" onClick={handlePreviousPage} disabled={offset === 0}>
             Previous
           </Button>
-          <Button
-            variant="outline"
-            onClick={handleNextPage}
-            disabled={entries.length < limit}
-          >
+          <Button variant="outline" onClick={handleNextPage} disabled={entries.length < limit}>
             Next
           </Button>
         </div>

@@ -68,8 +68,8 @@ export default function ExportDialog() {
         </DialogHeader>
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            This will create a ZIP file containing all questionnaire data, answer bank entries,
-            and evidence files.
+            This will create a ZIP file containing all questionnaire data, answer bank entries, and
+            evidence files.
           </p>
 
           <div className="flex gap-4 items-end">

@@ -131,13 +131,9 @@ pub async fn import_questionnaire(
     let db = SqliteDb::new(&vault_db_path(root));
     db.migrate().map_err(map_core_error)?;
 
-    let import = questionnaire::import_questionnaire(
-        &db,
-        root,
-        Path::new(&file_path),
-        &state.actor,
-    )
-    .map_err(map_core_error)?;
+    let import =
+        questionnaire::import_questionnaire(&db, root, Path::new(&file_path), &state.actor)
+            .map_err(map_core_error)?;
 
     Ok(import.into())
 }

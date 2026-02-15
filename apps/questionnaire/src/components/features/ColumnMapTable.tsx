@@ -18,20 +18,17 @@ export default function ColumnMapTable({ onComplete }: ColumnMapTableProps) {
   useEffect(() => {
     if (columnProfiles.length > 0) {
       // Simple heuristic: look for columns with "question" and "answer" in their labels
-      const qCol = columnProfiles.find((p) =>
-        p.label.toLowerCase().includes("question")
-      );
-      const aCol = columnProfiles.find((p) =>
-        p.label.toLowerCase().includes("answer")
-      );
-      const nCol = columnProfiles.find((p) =>
-        p.label.toLowerCase().includes("note")
-      );
+      const qCol = columnProfiles.find((p) => p.label.toLowerCase().includes("question"));
+      const aCol = columnProfiles.find((p) => p.label.toLowerCase().includes("answer"));
+      const nCol = columnProfiles.find((p) => p.label.toLowerCase().includes("note"));
 
-      if (qCol) setQuestionCol(qCol.col_ref);
-      if (aCol) setAnswerCol(aCol.col_ref);
-      if (nCol) setNotesCol(nCol.col_ref);
+      if (qCol || aCol || nCol) {
+        if (qCol) setQuestionCol(qCol.col_ref);
+        if (aCol) setAnswerCol(aCol.col_ref);
+        if (nCol) setNotesCol(nCol.col_ref);
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [columnProfiles]);
 
   const handleSave = async () => {
@@ -60,8 +57,8 @@ export default function ColumnMapTable({ onComplete }: ColumnMapTableProps) {
       <div>
         <h2 className="text-lg font-semibold mb-2">Map Columns</h2>
         <p className="text-sm text-muted-foreground">
-          Map the columns from your file to the expected fields. The system has auto-detected
-          some mappings based on column names.
+          Map the columns from your file to the expected fields. The system has auto-detected some
+          mappings based on column names.
         </p>
       </div>
 

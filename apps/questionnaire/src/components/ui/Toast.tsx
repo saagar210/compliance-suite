@@ -24,8 +24,7 @@ const Toast = React.forwardRef<
 >(({ className = "", variant = "default", ...props }, ref) => {
   const variantStyles = {
     default: "border bg-background text-foreground",
-    destructive:
-      "destructive group border-destructive bg-destructive text-destructive-foreground",
+    destructive: "destructive group border-destructive bg-destructive text-destructive-foreground",
     success: "border-green-500 bg-green-50 text-green-900",
   };
 
@@ -43,11 +42,7 @@ const ToastTitle = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Title>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Title>
 >(({ className = "", ...props }, ref) => (
-  <ToastPrimitives.Title
-    ref={ref}
-    className={`text-sm font-semibold ${className}`}
-    {...props}
-  />
+  <ToastPrimitives.Title ref={ref} className={`text-sm font-semibold ${className}`} {...props} />
 ));
 ToastTitle.displayName = ToastPrimitives.Title.displayName;
 
@@ -55,11 +50,7 @@ const ToastDescription = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Description>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Description>
 >(({ className = "", ...props }, ref) => (
-  <ToastPrimitives.Description
-    ref={ref}
-    className={`text-sm opacity-90 ${className}`}
-    {...props}
-  />
+  <ToastPrimitives.Description ref={ref} className={`text-sm opacity-90 ${className}`} {...props} />
 ));
 ToastDescription.displayName = ToastPrimitives.Description.displayName;
 
@@ -93,9 +84,7 @@ export function Toaster() {
         >
           <div className="grid gap-1">
             <ToastTitle>{toast.title}</ToastTitle>
-            {toast.description && (
-              <ToastDescription>{toast.description}</ToastDescription>
-            )}
+            {toast.description && <ToastDescription>{toast.description}</ToastDescription>}
           </div>
           <ToastClose />
         </Toast>
@@ -105,11 +94,4 @@ export function Toaster() {
   );
 }
 
-export {
-  Toast,
-  ToastTitle,
-  ToastDescription,
-  ToastClose,
-  ToastProvider,
-  ToastViewport,
-};
+export { Toast, ToastTitle, ToastDescription, ToastClose, ToastProvider, ToastViewport };

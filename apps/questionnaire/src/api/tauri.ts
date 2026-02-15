@@ -14,10 +14,7 @@ import type {
 // VAULT COMMANDS
 // ============================================================================
 
-export async function invokeVaultCreate(
-  path: string,
-  name: string
-): Promise<VaultDto> {
+export async function invokeVaultCreate(path: string, name: string): Promise<VaultDto> {
   return invoke("vault_create", { path, name });
 }
 
@@ -45,15 +42,11 @@ export interface ColumnProfileDto {
   sample: string[];
 }
 
-export async function invokeImportQuestionnaire(
-  filePath: string
-): Promise<QuestionnaireImportDto> {
+export async function invokeImportQuestionnaire(filePath: string): Promise<QuestionnaireImportDto> {
   return invoke("import_questionnaire", { file_path: filePath });
 }
 
-export async function invokeGetColumnProfiles(
-  importId: string
-): Promise<ColumnProfileDto[]> {
+export async function invokeGetColumnProfiles(importId: string): Promise<ColumnProfileDto[]> {
   return invoke("get_column_profiles", { import_id: importId });
 }
 
@@ -119,9 +112,7 @@ export interface ExportPackDto {
   file_count: number;
 }
 
-export async function invokeGenerateExportPack(
-  outputPath: string
-): Promise<ExportPackDto> {
+export async function invokeGenerateExportPack(outputPath: string): Promise<ExportPackDto> {
   return invoke("generate_export_pack", { output_path: outputPath });
 }
 
@@ -133,8 +124,6 @@ export async function invokeCheckLicenseStatus(): Promise<LicenseStatusDto> {
   return invoke("check_license_status");
 }
 
-export async function invokeInstallLicense(
-  licensePath: string
-): Promise<LicenseStatusDto> {
+export async function invokeInstallLicense(licensePath: string): Promise<LicenseStatusDto> {
   return invoke("install_license", { license_path: licensePath });
 }

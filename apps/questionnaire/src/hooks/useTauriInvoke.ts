@@ -28,8 +28,7 @@ export function useTauriInvoke<T, Args extends unknown[]>(
         setData(result);
         return result;
       } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : String(err);
+        const errorMessage = err instanceof Error ? err.message : String(err);
         setError(errorMessage);
 
         if (showErrorToast) {

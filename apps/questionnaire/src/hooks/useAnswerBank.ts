@@ -7,10 +7,7 @@ import {
   invokeAnswerBankDelete,
   invokeAnswerBankList,
 } from "../api/tauri";
-import type {
-  AnswerBankCreateInputDto,
-  AnswerBankUpdatePatchDto,
-} from "@packages/types";
+import type { AnswerBankCreateInputDto, AnswerBankUpdatePatchDto } from "@packages/types";
 
 export function useAnswerBank() {
   const store = useAnswerBankStore();
@@ -21,10 +18,7 @@ export function useAnswerBank() {
       store.setLoading(true);
       store.setError(null);
       try {
-        const entries = await invokeAnswerBankList(
-          limit ?? store.limit,
-          offset ?? store.offset
-        );
+        const entries = await invokeAnswerBankList(limit ?? store.limit, offset ?? store.offset);
         store.setEntries(entries);
         return entries;
       } catch (err) {

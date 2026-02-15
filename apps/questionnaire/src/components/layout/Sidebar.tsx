@@ -20,9 +20,7 @@ export function Sidebar() {
   return (
     <aside className="w-64 bg-secondary border-r border-border">
       <div className="p-6">
-        <h1 className="text-xl font-bold text-foreground mb-6">
-          Questionnaire Autopilot
-        </h1>
+        <h1 className="text-xl font-bold text-foreground mb-6">Questionnaire Autopilot</h1>
         <nav className="space-y-2">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;

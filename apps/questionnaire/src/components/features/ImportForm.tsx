@@ -73,11 +73,7 @@ export default function ImportForm({ onComplete }: ImportFormProps) {
         )}
 
         <div className="flex gap-4">
-          <Button
-            onClick={handleImport}
-            disabled={!selectedFile || loading}
-            className="min-w-32"
-          >
+          <Button onClick={handleImport} disabled={!selectedFile || loading} className="min-w-32">
             {loading ? "Importing..." : "Import Questionnaire"}
           </Button>
         </div>

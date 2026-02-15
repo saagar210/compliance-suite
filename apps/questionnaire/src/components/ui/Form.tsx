@@ -1,18 +1,10 @@
 import * as React from "react";
 
-export interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {}
+export type FormProps = React.FormHTMLAttributes<HTMLFormElement>;
 
-const Form = React.forwardRef<HTMLFormElement, FormProps>(
-  ({ className = "", ...props }, ref) => {
-    return (
-      <form
-        ref={ref}
-        className={`space-y-4 ${className}`}
-        {...props}
-      />
-    );
-  }
-);
+const Form = React.forwardRef<HTMLFormElement, FormProps>(({ className = "", ...props }, ref) => {
+  return <form ref={ref} className={`space-y-4 ${className}`} {...props} />;
+});
 
 Form.displayName = "Form";
 

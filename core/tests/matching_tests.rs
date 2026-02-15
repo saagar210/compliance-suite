@@ -27,11 +27,10 @@ fn load_answer_fixtures() -> Vec<AnswerBankEntry> {
         env!("CARGO_MANIFEST_DIR"),
         "/../fixtures/matching_baseline/answers.json"
     );
-    let content = std::fs::read_to_string(fixture_path)
-        .expect("Failed to read answers fixture");
+    let content = std::fs::read_to_string(fixture_path).expect("Failed to read answers fixture");
 
-    let fixtures: Vec<AnswerFixture> = serde_json::from_str(&content)
-        .expect("Failed to parse answers fixture");
+    let fixtures: Vec<AnswerFixture> =
+        serde_json::from_str(&content).expect("Failed to parse answers fixture");
 
     fixtures
         .into_iter()
@@ -59,8 +58,7 @@ fn load_test_cases() -> Vec<TestCase> {
         env!("CARGO_MANIFEST_DIR"),
         "/../fixtures/matching_baseline/test_cases.json"
     );
-    let content = std::fs::read_to_string(fixture_path)
-        .expect("Failed to read test cases fixture");
+    let content = std::fs::read_to_string(fixture_path).expect("Failed to read test cases fixture");
 
     serde_json::from_str(&content).expect("Failed to parse test cases fixture")
 }
@@ -95,13 +93,16 @@ fn test_matching_against_golden_fixtures() {
             "Expected {} to be in top 3 matches for '{}', but not found. Got: {:?}",
             case.expected_top_answer_id,
             case.question,
-            suggestions.iter().map(|s| &s.answer_bank_entry_id).collect::<Vec<_>>()
+            suggestions
+                .iter()
+                .map(|s| &s.answer_bank_entry_id)
+                .collect::<Vec<_>>()
         );
 
         let top_suggestion = &suggestions[0];
-        println!("Top match: {} (score: {:.2})",
-            top_suggestion.answer_bank_entry_id,
-            top_suggestion.score
+        println!(
+            "Top match: {} (score: {:.2})",
+            top_suggestion.answer_bank_entry_id, top_suggestion.score
         );
         println!("Explanation: {}", top_suggestion.confidence_explanation);
 

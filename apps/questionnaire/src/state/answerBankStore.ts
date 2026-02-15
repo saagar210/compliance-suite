@@ -46,9 +46,7 @@ export const useAnswerBankStore = create<AnswerBankState>((set) => ({
   addEntry: (entry) => set((state) => ({ entries: [...state.entries, entry] })),
   updateEntry: (entryId, updates) =>
     set((state) => ({
-      entries: state.entries.map((e) =>
-        e.entry_id === entryId ? { ...e, ...updates } : e
-      ),
+      entries: state.entries.map((e) => (e.entry_id === entryId ? { ...e, ...updates } : e)),
     })),
   removeEntry: (entryId) =>
     set((state) => ({

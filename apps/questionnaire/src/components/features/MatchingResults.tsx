@@ -76,16 +76,12 @@ export default function MatchingResults() {
                       {(suggestion.score * 100).toFixed(0)}%
                     </span>
                   </TableCell>
-                  <TableCell className="font-medium">
-                    {suggestion.normalized_question}
-                  </TableCell>
+                  <TableCell className="font-medium">{suggestion.normalized_question}</TableCell>
                   <TableCell className="text-sm text-muted-foreground">
                     {suggestion.normalized_answer?.substring(0, 100) || ""}
                     {(suggestion.normalized_answer?.length || 0) > 100 && "..."}
                   </TableCell>
-                  <TableCell className="text-sm">
-                    {suggestion.confidence_explanation}
-                  </TableCell>
+                  <TableCell className="text-sm">{suggestion.confidence_explanation}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -96,8 +92,7 @@ export default function MatchingResults() {
       {!loading && suggestions.length === 0 && question && (
         <div className="text-center py-12 border rounded-md">
           <p className="text-muted-foreground">
-            No matches found. Try rephrasing your question or add more entries to the answer
-            bank.
+            No matches found. Try rephrasing your question or add more entries to the answer bank.
           </p>
         </div>
       )}

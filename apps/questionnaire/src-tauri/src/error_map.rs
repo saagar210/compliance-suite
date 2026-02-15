@@ -51,8 +51,12 @@ pub fn map_core_error(err: CoreError) -> AppErrorDto {
 /// Convert AppErrorDto to JSON string for Tauri responses
 impl std::fmt::Display for AppErrorDto {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", serde_json::to_string(self).unwrap_or_else(|_| {
-            format!(r#"{{"code":"{}","message":"{}"}}"#, self.code, self.message)
-        }))
+        write!(
+            f,
+            "{}",
+            serde_json::to_string(self).unwrap_or_else(|_| {
+                format!(r#"{{"code":"{}","message":"{}"}}"#, self.code, self.message)
+            })
+        )
     }
 }

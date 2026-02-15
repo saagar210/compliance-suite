@@ -15,10 +15,7 @@ export default function ImportPage() {
     <div className="flex h-screen bg-background">
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
-        <Header
-          title="Import Questionnaire"
-          subtitle="Step 1: Import your questionnaire file"
-        />
+        <Header title="Import Questionnaire" subtitle="Step 1: Import your questionnaire file" />
         <main className="flex-1 overflow-auto p-8">
           <div className="max-w-4xl mx-auto">
             <ImportForm onComplete={handleImportComplete} />
