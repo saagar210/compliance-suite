@@ -129,7 +129,7 @@ pub async fn import_questionnaire(
 
     let root = Path::new(&vault_path);
     let db = SqliteDb::new(&vault_db_path(root));
-    db.migrate().map_err(map_core_error)?;
+    db.migrate().map_err(map_core_error)?; // TODO: Move migration to vault open/creation
 
     let import =
         questionnaire::import_questionnaire(&db, root, Path::new(&file_path), &state.actor)
