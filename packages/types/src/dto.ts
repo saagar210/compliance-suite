@@ -104,3 +104,57 @@ export type AnswerBankListParamsDto = {
   limit: number;
   offset: number;
 };
+
+// Phase 2.4 (Matching Algorithm)
+export type MatchSuggestionDto = {
+  id: string;
+  answer_bank_entry_id: string;
+  answer_preview: string;  // First 200 chars of answer
+  score: number;           // 0.0 - 1.0
+  confidence_explanation: string;
+  normalized_question?: string;
+  normalized_answer?: string;
+};
+
+export type MatchingInputDto = {
+  question: string;
+  vault_id: string;
+  top_n?: number;
+};
+
+// Phase 2 (Extended): Column profiling for import
+export type ColumnProfileDto = {
+  column_index: number;
+  inferred_type: 'question' | 'answer' | 'notes' | 'unknown';
+  sample_values: string[];
+  validation_issues?: string[];
+};
+
+export type QuestionnaireImportWithProfilesDto = QuestionnaireImportDto & {
+  column_count: number;
+  question_count: number;
+  column_profiles: ColumnProfileDto[];
+};
+
+// Export pack DTOs
+export type ExportPackDto = {
+  id: string;
+  vault_id: string;
+  export_type: string;
+  file_name: string;
+  file_size_bytes: number;
+  file_hash: string;
+  manifest: {
+    export_date: string;
+    version: string;
+    entry_count: number;
+  };
+  downloaded: boolean;
+  created_at: string;
+};
+
+export type ExportFilterDto = {
+  include_evidence?: boolean;
+  include_audit_trail?: boolean;
+  questionnaire_id?: string;
+};

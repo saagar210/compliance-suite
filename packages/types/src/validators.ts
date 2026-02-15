@@ -13,6 +13,8 @@ import type {
   ColumnMapDto,
   ColumnMapValidationDto,
   ColumnMapValidationIssueDto,
+  MatchingInputDto,
+  MatchSuggestionDto,
   QuestionnaireImportDto,
 } from './dto';
 
@@ -121,4 +123,49 @@ export function isAnswerBankListParamsDto(value: unknown): value is AnswerBankLi
 export function isAnswerBankUpdatePatchDto(value: unknown): value is AnswerBankUpdatePatchDto {
   // Patch can be partial; just ensure object-ness.
   return !!value && typeof value === 'object';
+}
+
+// Phase 2.4: Matching validators
+export function validateMatchingInputDto(value: unknown): ColumnMapValidationDto {
+  const issues: ColumnMapValidationIssueDto[] = [];
+  const v = value as any;
+
+  if (!v || typeof v !== 'object') {
+    return { ok: false, issues: [issue('TYPE_ERROR', 'expected object')] };
+  }
+
+  if (typeof v.question !== 'string' || v.question.trim().length < 5) {
+    issues.push(issue('REQUIRED', 'question must be at least 5 characters', 'question'));
+  }
+
+  if (typeof v.question === 'string' && v.question.length > 1000) {
+    issues.push(issue('INVALID', 'question must be at most 1000 characters', 'question'));
+  }
+
+  if (typeof v.vault_id !== 'string' || v.vault_id.trim() === '') {
+    issues.push(issue('REQUIRED', 'vault_id is required', 'vault_id'));
+  }
+
+  if (v.top_n != null) {
+    if (typeof v.top_n !== 'number' || !Number.isInteger(v.top_n)) {
+      issues.push(issue('TYPE_ERROR', 'top_n must be an integer', 'top_n'));
+    } else if (v.top_n < 1 || v.top_n > 10) {
+      issues.push(issue('INVALID', 'top_n must be between 1 and 10', 'top_n'));
+    }
+  }
+
+  return { ok: issues.length === 0, issues };
+}
+
+export function isMatchSuggestionDto(value: unknown): value is MatchSuggestionDto {
+  const v = value as any;
+  return (
+    !!v &&
+    typeof v === 'object' &&
+    typeof v.id === 'string' &&
+    typeof v.answer_bank_entry_id === 'string' &&
+    typeof v.answer_preview === 'string' &&
+    typeof v.score === 'number' &&
+    typeof v.confidence_explanation === 'string'
+  );
 }
