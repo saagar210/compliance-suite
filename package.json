@@ -2,10 +2,14 @@
   "name": "compliance-suite",
   "private": true,
   "scripts": {
+    "dev": "pnpm --dir apps/questionnaire run tauri dev",
+    "dev:lean": "bash scripts/dev-lean.sh",
     "lint": "bash scripts/lint.sh",
     "typecheck": "bash scripts/typecheck.sh",
     "test": "bash scripts/test.sh",
     "build": "bash scripts/build.sh",
-    "format": "bash scripts/format.sh"
+    "format": "bash scripts/format.sh",
+    "clean:heavy": "bash scripts/clean-heavy.sh",
+    "clean:local": "bash scripts/clean-local.sh"
   }
 }
