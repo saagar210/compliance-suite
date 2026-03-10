@@ -12,7 +12,15 @@ else
 fi
 
 RUN_ID="${CODEX_RUN_ID:-$(date +%Y%m%dT%H%M%S)-$$}"
-CODEX_CACHE_ROOT="${CODEX_CACHE_ROOT:-/Users/d/Library/Caches/Codex}"
+if [[ -n "${CODEX_CACHE_ROOT:-}" ]]; then
+  cache_root="$CODEX_CACHE_ROOT"
+elif [[ "${OSTYPE:-}" == darwin* ]]; then
+  cache_root="${HOME}/Library/Caches/Codex"
+else
+  cache_root="${XDG_CACHE_HOME:-${HOME}/.cache}/Codex"
+fi
+
+CODEX_CACHE_ROOT="$cache_root"
 CODEX_BUILD_ROOT="${CODEX_BUILD_ROOT:-$CODEX_CACHE_ROOT/build}"
 CODEX_LOG_ROOT="${CODEX_LOG_ROOT:-$CODEX_CACHE_ROOT/logs}"
 
