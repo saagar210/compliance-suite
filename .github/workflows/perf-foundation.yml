@@ -1,12 +1,11 @@
 name: perf-foundation
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
-    branches: [main, master]
+  workflow_dispatch:
 
 jobs:
   perf-bundle:
+    if: ${{ false }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -24,6 +23,7 @@ jobs:
       - run: pnpm perf:bundle
 
   perf-build:
+    if: ${{ false }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -40,6 +40,7 @@ jobs:
       - run: pnpm perf:build
 
   perf-lighthouse:
+    if: ${{ false }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -57,6 +58,7 @@ jobs:
       - run: pnpm perf:lhci || true
 
   perf-assets:
+    if: ${{ false }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -65,6 +67,7 @@ jobs:
       - run: bash scripts/perf/check-assets.sh
 
   perf-memory:
+    if: ${{ false }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -81,7 +84,7 @@ jobs:
       - run: pnpm perf:memory
 
   perf-api:
-    if: ${{ vars.PERF_BASE_URL != '' }}
+    if: ${{ false }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -93,7 +96,7 @@ jobs:
           BASE_URL: ${{ vars.PERF_BASE_URL }}
 
   perf-db:
-    if: ${{ vars.PERF_DATABASE_URL != '' }}
+    if: ${{ false }}
     runs-on: ubuntu-latest
     permissions:
       contents: read

@@ -1,0 +1,28 @@
+name: quality-gates
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: macos-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Install workspace dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Run canonical verify contract
+        run: bash .codex/scripts/run_verify_commands.sh
